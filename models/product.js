@@ -55,4 +55,16 @@ module.exports = class Product {
       cb(product);
     });
   }
+
+  static delete(id) {
+    getProductsFromFile((product) => {
+      // untuk mengahpus bisa menggunakan ini atau pakai findIndex dan replace datanya
+      console.log(id);
+      const updatedProduct = product.filter((prod) => prod.id !== id);
+
+      fs.writeFile(p, JSON.stringify(updatedProduct), (err) => {
+        console.log(err);
+      });
+    });
+  }
 };
