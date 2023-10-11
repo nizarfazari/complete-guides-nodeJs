@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const Cart = require("./cart");
 const p = path.join(
   path.dirname(require.main.filename),
   "data",
@@ -56,14 +57,14 @@ module.exports = class Product {
     });
   }
 
-  static delete(id) {
-    getProductsFromFile((product) => {
+  static deleteById(id) {
+    getProductsFromFile((products) => {
+      const product = products.find((prod) => prod.id === id);
       // untuk mengahpus bisa menggunakan ini atau pakai findIndex dan replace datanya
-      console.log(id);
-      const updatedProduct = product.filter((prod) => prod.id !== id);
+      const updatedProduct = products.filter((prod) => prod.id !== id);
 
       fs.writeFile(p, JSON.stringify(updatedProduct), (err) => {
-        console.log(err);
+        Cart.deleteProduct(id, product);
       });
     });
   }

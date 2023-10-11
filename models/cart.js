@@ -20,7 +20,9 @@ module.exports = class Cart {
         products: [],
         totalPrice: 0,
       };
-
+      if (!err) {
+        cart = JSON.parse(fileContent);
+      }
       // Analisis cart apakah product ada ?
       const existingProductIndex = cart.products.findIndex(
         (prod) => prod.id === id
@@ -33,6 +35,7 @@ module.exports = class Cart {
         updatedProduct = { ...existingProduct };
         updatedProduct.qty = updatedProduct.qty + 1;
         cart.products = [...cart.products];
+        console.log(cart);
         cart.products[existingProductIndex] = updatedProduct;
       } else {
         updatedProduct = {
@@ -46,5 +49,31 @@ module.exports = class Cart {
         console.log(err);
       });
     });
+  }
+
+  static deleteProduct(id, productPrice) {
+    fs.readFile(p, (err, fileContent) => {
+      if (err) {
+        return;
+      }
+
+      const updateCart = { ...JSON.parse(fileContent) };
+      const product = updateCart.products.find((prod) => prod.id === id);
+      if (!product) {
+        return;
+      }
+      const productQty = product.qty;
+      updateCart.products = updateCart.products.filter(
+        (prod) => prod.id !== id
+      );
+
+      updateCart.totalPrice = updateCart.totalPrice - productPrice * productQty;
+      console.log(updateCart);
+      fs.writeFile(p, JSON.stringify(updateCart), (err) => {
+        console.log(err);
+      });
+    });
+
+    
   }
 };
