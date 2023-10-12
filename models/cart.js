@@ -35,7 +35,7 @@ module.exports = class Cart {
         updatedProduct = { ...existingProduct };
         updatedProduct.qty = updatedProduct.qty + 1;
         cart.products = [...cart.products];
-        console.log(cart);
+ 
         cart.products[existingProductIndex] = updatedProduct;
       } else {
         updatedProduct = {
@@ -59,6 +59,7 @@ module.exports = class Cart {
 
       const updateCart = { ...JSON.parse(fileContent) };
       const product = updateCart.products.find((prod) => prod.id === id);
+      // untuk mengatasi jika bukan bagian dari cart
       if (!product) {
         return;
       }
@@ -73,7 +74,18 @@ module.exports = class Cart {
         console.log(err);
       });
     });
-
     
+  }
+
+  static getCart(cb){
+    fs.readFile(p, (err,fileContent) => {
+      const cart = JSON.parse(fileContent)
+      if(err){
+        cb(null)
+      }else{
+        cb(cart)
+      }
+
+    })
   }
 };
