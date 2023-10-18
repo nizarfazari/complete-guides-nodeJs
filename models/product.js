@@ -1,6 +1,5 @@
-const db = require('../util/database');
+const db = require("../util/database");
 const Cart = require("./cart");
-
 
 module.exports = class Product {
   constructor(id, title, imageUrl, description, price) {
@@ -12,18 +11,18 @@ module.exports = class Product {
   }
 
   save() {
-   
+    return db.execute(
+      // untuk mencegah sql injection jadinya menggunakan syntax spt ini
+      "INSERT INTO tbl_products (title, price, imageUrl, description ) VALUES ( ?, ?, ?, ?)",
+      [this.title, this.price, this.imageUrl, this.description]
+    );
   }
 
   static fetchAll() {
-  return db.execute('SELECT * FROM tbl_products')
+    return db.execute("SELECT * FROM tbl_products");
   }
 
-  static findById(id, cb) {
-    
-  }
+  static findById(id, cb) {}
 
-  static deleteById(id) {
-    
-  }
+  static deleteById(id) {}
 };
