@@ -9,17 +9,18 @@ exports.getProducts = (req, res, next) => {
       path: "/products",
     });
   }).catch();
+
 };
 
 exports.getProduct = (req, res, next) => {
   const proId = req.params.productId;
-  Product.findById(proId, (product) => {
+  Product.findById(proId).then(([product]) => {
     res.render("shop/product-detail", {
-      product: product,
+      product: product[0],
       pageTitle: product.title,
       path: "/products",
     });
-  });
+  }).catch();
 };
 
 exports.postCart = (req, res, next) => {

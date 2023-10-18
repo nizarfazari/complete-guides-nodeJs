@@ -22,7 +22,9 @@ module.exports = class Product {
     return db.execute("SELECT * FROM tbl_products");
   }
 
-  static findById(id, cb) {}
+  static findById(id) {
+    return db.execute("SELECT * FROM tbl_products WHERE tbl_products.id = ?", [id]);
+  }
 
   static deleteById(id) {}
 };
