@@ -9,10 +9,11 @@ app.set("view engine", "ejs");
 
 //to set view location in where is it
 app.set("views", "views");
-
+const db = require('./util/database')
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const { get404 } = require("./controllers/error");
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
