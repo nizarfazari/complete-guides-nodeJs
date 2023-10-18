@@ -14,9 +14,6 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const { get404 } = require("./controllers/error");
 
-db.execute("SELECT * FROM tbl_products").then(res => {
-    console.log(res[0], res[1]);
-}).catch()
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
