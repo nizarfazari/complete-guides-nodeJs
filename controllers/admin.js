@@ -10,11 +10,21 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const { title, imageUrl, price, description } = req.body;
+  console.log(req.user, 'asdasdas');
+  // di udemynya sendiri bisa menggunakan Magic Assocaiation karena terbuat dari relasi database antara user dengan product
+  // req.user
+  // .createProduct({
+  //   title,
+  //   price,
+  //   imageUrl,
+  //   description,
+  // })
   Product.create({
     title,
     price,
     imageUrl,
     description,
+    userId : req.user.id
   })
     .then((result) => {
       console.log(result);

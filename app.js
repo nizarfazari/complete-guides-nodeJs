@@ -16,15 +16,17 @@ const { get404 } = require("./controllers/error");
 const Product = require("./models/product");
 const User = require("./models/user");
 
-app.use((req,res,next) => {
-    User.findByPk(1).then((user) => {
-        console.log(user, 'asdasds');
-        req.user = user
-        next()
-    }).catch((err) => {
-        console.log(err);
+app.use((req, res, next) => {
+  // to set req.user agar datanya terdapat data user yang  nantinya di gunakan pada relation product
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
     });
-})
+});
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -49,7 +51,6 @@ sequelize
     return user;
   })
   .then((user) => {
- 
     app.listen(3000);
   })
   .catch((err) => {
