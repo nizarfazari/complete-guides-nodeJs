@@ -9,7 +9,7 @@ app.set("view engine", "ejs");
 
 //to set view location in where is it
 app.set("views", "views");
-const db = require('./util/database')
+const sequelize = require('./util/database')
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const { get404 } = require("./controllers/error");
@@ -23,4 +23,9 @@ app.use(shopRoutes);
 
 app.use(get404);
 
-app.listen(3000);
+sequelize.sync().then(res => {
+    app.listen(3000);
+}).catch(err => {
+    console.log(err);
+})
+
