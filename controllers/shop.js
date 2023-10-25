@@ -73,10 +73,10 @@ exports.postCartDeleteProduct = (req, res, next) => {
     })
     .then((products) => {
       const product = products[0];
-       product.cartItem.destroy();
-       res.redirect("/cart");
+      product.cartItem.destroy();
+      res.redirect("/cart");
     })
-    
+
     .catch((err) => {
       console.log(err);
     });
@@ -130,4 +130,31 @@ exports.getOrders = (req, res, next) => {
     path: "/orders",
     pageTitle: "orders",
   });
+};
+exports.postOrder = (req, res, next) => {
+  let fetchCart
+  req.user
+    .getCart()
+    .then((cart) => {
+      fetchCart = cart
+      return cart.getProducts();
+    })
+    .then((products) => {
+      return req.user.createOrder().then((order) => {
+        return order.addProducts(
+          products.map((product) => {
+            // to set setiap product yang nantinya di taurh di alam CartItem
+            product.orderItem = { quantity: product.cartItem.quantity };
+            return product;
+          })
+        );
+      });
+    })
+    .then((result) => {
+      fetchCart.setProducts(null)
+      res.redirect("/orders");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

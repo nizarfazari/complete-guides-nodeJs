@@ -17,6 +17,8 @@ const Product = require("./models/product");
 const User = require("./models/user");
 const Cart = require("./models/cart");
 const CartItem = require("./models/cart-item");
+const Order = require("./models/order");
+const OrderItem = require("./models/order-item");
 
 app.use((req, res, next) => {
   // to set req.user agar datanya terdapat data user yang  nantinya di gunakan pada relation product
@@ -38,12 +40,25 @@ app.use(shopRoutes);
 
 app.use(get404);
 
+// One to Many
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
+
+// One to Many
 User.hasOne(Cart);
 Cart.belongsTo(User);
+
+// Many to Many
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+
+// belonging to one user
+Order.belongsTo(User);
+// Many => One to Many
+User.hasMany(Order);
+
+// Many to many bisa bisa kita tidak panggil balikannya yang sama case di atas
+Order.belongsToMany(Product, { through: OrderItem });
 
 sequelize
   // .sync({force : true})
@@ -57,8 +72,8 @@ sequelize
     }
     return user;
   })
-  .then(user => {
-    return user.createCart()
+  .then((user) => {
+    return user.createCart();
   })
   .then((cart) => {
     app.listen(3000);
