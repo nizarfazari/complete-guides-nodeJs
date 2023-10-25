@@ -126,10 +126,19 @@ exports.getCheckout = (req, res, next) => {
   });
 };
 exports.getOrders = (req, res, next) => {
-  res.render("shop/orders", {
-    path: "/orders",
-    pageTitle: "orders",
+  // jika ingin mengambil data relasi product dari order 
+  // menggunakan konsep eager loading
+  req.user.getOrders({ include :  ['products']}).then((orders) => {
+    console.log(orders);
+    res.render("shop/orders", {
+      path: "/orders",
+      pageTitle: "orders",
+      orders : orders
+    });  
+  }).catch((err) => {
+    console.log(err);
   });
+  
 };
 exports.postOrder = (req, res, next) => {
   let fetchCart
